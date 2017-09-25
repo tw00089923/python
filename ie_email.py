@@ -11,8 +11,8 @@ import unicodedata
 class read_email :
     def __init__(self):
         self.server = "imap.gmail.com"
-        self.user = "tw00089923@cycu.org.tw"
-        self.pwd = "kcr01260"
+        self.user = ""
+        self.pwd = ""
         self.observer = "wendypeng@kcr.com.tw"
         self.email_dict = {}
     def connect_gmail(self):
