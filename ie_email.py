@@ -57,8 +57,9 @@ class read_email :
                 #else:
                     #save.update({from_kcr[1][0].decode(charset):parse_subject[0][0].decode(charset)})
         print(save)
-user = "tw00089923@cycu.org.tw"
-a = read_email(user,"kcr01260")
+user =""
+pwd =""
+a = read_email(user,pwd")
 a.read_email_by_label_1("KCR_EC")
 
 
