@@ -1,20 +1,22 @@
-import sys
+#import sys
 import imaplib
 #import getpass
 import email
 import datetime
-import os 
+#import os 
 from email.mime.text import MIMEText
 from email.mime.message import MIMEMessage
 from email.header import decode_header
-import unicodedata
+import re
+
+
 class read_email :
-    def __init__(self):
+    def __init__(self,user,pwd):
         self.server = "imap.gmail.com"
-        self.user = ""
-        self.pwd = ""
+        self.user = user
+        self.pwd = pwd
         self.observer = "wendypeng@kcr.com.tw"
-        self.email_dict = {}
+        self.email_dict = []
     def connect_gmail(self):
         M = imaplib.IMAP4_SSL(self.server)
         try:
@@ -28,80 +30,37 @@ class read_email :
         M.login(self.user,self.pwd)
         print("success to login "+self.user)
         rv , data = M.select(label)
-       
+   
         uids =data[0].split()
-        max_mail = int(str(uids[0],'utf-8'))
-        bytes1 = bytes(str(max_mail-5), encoding = "utf-8")
-        tpy , dat =M.fetch(bytes1,'(RFC822)')
-
-        parser_mail2bytes = email.message_from_bytes(dat[0][1])
-        print(email.parser.HeaderParser(dat[0][1]))
-        parse_a = MIMEText(parser_mail2bytes['subject'],'plain',"gb2312")
-        #print(email.header.make_header(email.header.decode_header(parser_mail2bytes['subject'])))
-        b = decode_header(parser_mail2bytes['subject'])
-        
-        
-    
-        #print(parse_mail)
-           # byte_number = self.byte2int(last_email_id)
-           # print(byte_number)
-            #for i in range(1,int(str(last_email_id,'utf-8'))+1,1):
-               # tpy , dat =M.fetch(bytes(str(i), encoding = "utf-8"),'(RFC822)')
-               # sub = email.message_from_bytes(dat[0][1])
-               # parse_subject = email.header.make_header(email.header.decode_header(sub['subject']))
-               # print(parse_subject)
-
-                #for i in dat:
-                    
-                   # print(dat[0][1])
-
-                
-                #for response_part in dat:
-                   # if isinstance(response_part, tuple):
-                      #  if tpy == "OK":      
-
-                            #sub = email.message_from_bytes(dat[0][1])
-                            #print(sub)
-                          #  parse_subject = email.header.make_header(email.header.decode_header(sub['Subject']))
-                            #print(parse_subject)
-                            #print(parse_subject)
-                           # if parse_from == self.observer:
-                               # print(parse_from)
-                            #self.email_dict.append(str(parse_subject))
-                           # self.email_dict['subject'] = str(parse_subject)
-                        #  for response_part in dat:
-        #except:
-           # print("false!")
-    def read_email_by_label_2(self,label):
-        M = imaplib.IMAP4_SSL(self.server)
-        try:
-            M.login(self.user,self.pwd)
-            print("success to login "+self.user)
-            rv , data = M.select(label)
-            a = data[0].split()
-            first_email_id = a[0]
-            last_email_id = a[-1]
-            print(last_email_id)
-            for i in range(1,int(str(last_email_id,'utf-8'))+1,1):
-                tpy , dat =M.fetch(bytes(str(i), encoding = "utf-8"),'(RFC822)') 
-                if tpy == "OK":                    
-                    sub = email.message_from_bytes(dat[0][1])
-                    print(sub)
-                    parse_subject = email.header.make_header(email.header.decode_header(sub['Subject']))
-                    
-                    parse_from = sub['From']
-                   
-                    if parse_from == self.observer:
-                        print(parse_from)
-                    self.email_dict.append(str(parse_subject))
-
-        except:
-            print("false!")
+        max_mail = int(str(uids[0],'utf-8'))   
+        save = {}
+        for i in range(0,max_mail,1):
+            bytes1 = bytes(str(max_mail-i), encoding = "utf-8")
+            typ , dat = M.fetch(bytes1,'(RFC822)')
             
+            if isinstance(dat,list):
+                sub = email.message_from_bytes(dat[0][1])
+                parse_subject = email.header.decode_header(sub['subject'])
+                from_kcr = email.header.decode_header(sub['from'])
+                #print(parse_subject[0])
+                #print(sub.get_payload()[0].get_payload())
+                charset = parse_subject[0][1]
+                #patten = r'RT-[0-9]{4}'
+                #match = re.findall(patten,sub.get_payload()[0].get_payload())
+                #print(match)                
+                if charset == "gb2312":
+                    title = parse_subject[0][0].decode("gbk")
+                    save[title] = [1]
+                    #save.update({from_kcr[1][0].decode('gbk'):parse_subject[0][0].decode("gbk")})
+                #elif charset is None:
+                    #save.update({from_kcr[1][0]:parse_subject[0][0]})
+                #else:
+                    #save.update({from_kcr[1][0].decode(charset):parse_subject[0][0].decode(charset)})
+        print(save)
+user = "tw00089923@cycu.org.tw"
+a = read_email(user,"kcr01260")
+a.read_email_by_label_1("KCR_EC")
 
-
-a = read_email()
-a.read_email_by_label_1("KCR")
 
 
 #a = b'3'
