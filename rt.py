@@ -1,4 +1,4 @@
-import re 
+#import re 
 
 
 
@@ -7,7 +7,7 @@ import re
 #match = re.findall(patten,pat)
 #print(match)
 
-import datetime
+#import datetime
 
 #m = re.match(r'[0-9]{9}', 'www.google.com 99999999')
 
@@ -22,4 +22,9 @@ import datetime
 #print(b)
 
 
-print(datetime.datetime.today().strftime('%Y/%m/%d'))
+#print(datetime.datetime.today().strftime('%Y/%m/%d'))
+import rate_twbank
+
+a = rate_twbank.crawl_twbank()
+b = a.find_cash_rate()
+print(b)

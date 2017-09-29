@@ -57,7 +57,7 @@ class crawl_twbank:
                 print(soup_find.p['id'])
         except:
             pass
-    def find_date(self):
+    def find_cash_rate(self):
         url_data = requests.get(tw_bank)
         soup2parse = soup(url_data.text,'html.parser')
         #找title
@@ -94,14 +94,18 @@ class crawl_twbank:
                     rates.append(rate[0])
         else:
             rates = None  
+        all_rate_fisrt={}
+        all_rate = {}
         if not title is None :
-            print(title)
-            print(currency)
-            print(rates)
-        
+            if isinstance(currency,list):
+                    
+                for index,element in enumerate(currency): 
+                    all_rate[element] = [rates[index * 2],rates[index * 2+1]]        
+            
+            all_rate_fisrt[title] = all_rate
+        return all_rate_fisrt
+#a = crawl_twbank()
 
-a = crawl_twbank()
-
-b = a.find_date()
-print(b)
+#b = a.find_cash_rate()
+#print(b)
 
