@@ -104,8 +104,8 @@ class crawl_twbank:
             
             all_rate_fisrt[title] = all_rate
         return all_rate_fisrt
-#a = crawl_twbank()
+a = crawl_twbank()
 
-#b = a.find_cash_rate()
-#print(b)
+b = a.find_cash_rate()
+print(b)
 
